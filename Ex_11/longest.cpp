@@ -32,7 +32,6 @@ int lenOfLongSubarr(int * arr, int n, int h){
     return maxLen;
 
 }
-//Georgia256 
 
 void read(char* filename,int &Days, int &Hospitals,int *days){
 
