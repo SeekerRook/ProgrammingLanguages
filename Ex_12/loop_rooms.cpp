@@ -51,28 +51,47 @@ void create_matrix(int m, int n, char arr[1000][1000], bool matrix[1000][1000]){
 //return matrix;
 
 }
+void read(char* filename,int &m, int &n,char arr[1000][1000]){
 
-int main(){
-    int m = 4;
-    int n = 4;
+    ifstream file;//initializtion
+    FILE* fd;
+    char *file_name = filename;
+    file.open(file_name);
+    fd = fopen(file_name,"r");
+    if (file.is_open()){
+
+        file >> m >> n ;
+        int temp;
+        int i = 0;
+        int j = 0;
+        do{
+            temp = getc(fd);
+        }while(temp != '\n');
+
+        do{
+            temp = getc(fd);
+            cout <<"a["<<i<<"]["<<j<<"] = "<< static_cast<char>(temp) << '\n';
+            if(temp == '\n'){
+                i++;
+                j= 0;
+            }
+            else{
+                arr[i][j] = temp;
+                j++;
+            }
+            
+        }while(temp!= EOF);
+    }
+    else {cout << "Unable to open "<<file_name<<'\n';}
+
+}
+
+int main(int argc, char **argv){
+    int m ;
+    int n ;
     char arr [1000][1000];
     bool matrix[1000][1000];
-    arr[0][0] = 'L';
-    arr[0][1] = 'R';
-    arr[0][2] = 'U';
-    arr[0][3] = 'D';
-    arr[1][0] = 'R';
-    arr[1][1] = 'D';
-    arr[1][2] = 'D';
-    arr[1][3] = 'D';
-    arr[2][0] = 'D';
-    arr[2][1] = 'L';
-    arr[2][2] = 'R';
-    arr[2][3] = 'R';
-    arr[3][0] = 'R';
-    arr[3][1] = 'R';
-    arr[3][2] = 'U';
-    arr[3][3] = 'L';
+    read(argv[1],m,n,arr);
     create_matrix(m,n,arr, matrix);
     for (int i = 0 ; i< m*n; i++){
         for (int j = 0; j < m*n+1; j++){

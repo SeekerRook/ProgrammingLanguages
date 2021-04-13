@@ -1,7 +1,8 @@
 // C++ implementation of the approach
 #include <bits/stdc++.h>
 using namespace std;
-#define N 100000
+
+int N = 1000000000;
 
 bool checkfrac(int sum, int l, int h){
     int frac = sum/(h * l);
@@ -55,8 +56,9 @@ void read(char* filename,int &Days, int &Hospitals,int *days){
 int main(int argc, char **argv)
 {
     int n , h;
-    int arr[1000];
-    read(argv[1],n,h,arr); 
-    cout << lenOfLongSubarr(arr, n, h)<< '\n';
+    int *ptr;
+	ptr = (int*) malloc(N*sizeof(int));
+    read(argv[1],n,h,ptr); 
+    cout << lenOfLongSubarr(ptr, n, h)<< '\n';
     return 0;
 }
