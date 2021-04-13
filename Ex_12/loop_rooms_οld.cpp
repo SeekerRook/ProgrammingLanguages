@@ -2,47 +2,14 @@
 #include <cstdio>
 using namespace std;
 
-int findrooms(int matrix[1000],int m,int n){
-    int E = m*n;
-    int res = 0;
-    bool front [1000];
-    bool good[1000];
-    bool bad[1000];
-    int l;
-    int searched_iterator;
-    for (int i = 0; i < E; i++){
-        if(matrix[i]==-1){
-            good[i] = true;
-            for (int j = 0 ; j < E; j++){
-                if(front[j]) good[j] = true;
-            }  
-        }
-        else {
-            if (good[matrix[i]] == true){
-                good[i] = true;
-                for (int j = 0 ; j < E; j++){
-                    if(front[j]) good[j] = true;
-                }
-            }   
-            else if (bad[matrix[i]] == true || front[matrix[i]] == true){
-                bad[i] = true;
-                res++;
-                for (int j = 0 ; j < E; j++){
-                    if(front[j]) {
-                        bad[j] = true;
-                        res++;
-                    }
-                }
-            }
-            else front[i] = true;          
-        }
-    }
-
-    return res;
-
+int findrooms(bool matrix[1000][1000]){
+    int res;
+    
+    
+    
 }
 
-void create_matrix(int m, int n, char arr[1000][1000], int matrix[1000]){
+void create_matrix(int m, int n, char arr[1000][1000], bool matrix[1000][1000]){
     int E = m*n;//exit node
 
     // bool matrix [E][E+1];//+1 for exit
@@ -53,35 +20,35 @@ void create_matrix(int m, int n, char arr[1000][1000], int matrix[1000]){
             switch (arr[i][j]){
                 case 'R': 
                     if (j+1>= n || j+1 < 0){//may not use second 
-                        matrix[x]= -1;
+                        matrix[x][E]= true;
                     }
                     else{
-                        matrix[x] = j+1+n*i;
+                        matrix[x][j+1+n*i] = true;
                     }
                     break;
                     
                 case 'L':
                     if (j-1>= n|| j-1 <0){
-                        matrix[x]= -1;
+                        matrix[x][E]= true;
                     }
                     else{
-                        matrix[x] = j-1+n*i;
+                        matrix[x][j-1+n*i] = true;
                     }
                     break;
                 case 'U':
                     if (i-1>= n || i-1<0){
-                        matrix[x]= -1;
+                        matrix[x][E]= true;
                     }
                     else{
-                        matrix[x] = j+n*i-n;
+                        matrix[x][j+n*(i-1)] = true;
                     }
                     break;
                 case 'D':
                     if (i+1>= n|| i+1 <0){
-                        matrix[x]= -1;
+                        matrix[x][E]= true;
                     }
                     else{
-                        matrix[x] = j+n*i+n;
+                        matrix[x][j+n*(i+1)] = true;
                     }
                     break;            
             }
@@ -110,7 +77,7 @@ void read(char* filename,int &m, int &n,char arr[1000][1000]){
 
         do{
             temp = getc(fd);
-
+            cout <<"a["<<i<<"]["<<j<<"] = "<< static_cast<char>(temp) << '\n';
             if(temp == '\n'){
                 i++;
                 j= 0;
@@ -130,9 +97,13 @@ int main(int argc, char **argv){
     int m ;
     int n ;
     char arr [1000][1000];
-    int matrix[1000];
+    bool matrix[1000][1000];
     read(argv[1],m,n,arr);
     create_matrix(m,n,arr, matrix);
-
-    cout <<findrooms(matrix,m,n)<<'\n';
+    for (int i = 0 ; i< m*n; i++){
+        for (int j = 0; j < m*n+1; j++){
+            cout << "   " << matrix[i][j];
+        }
+        cout << '\n';
+    }
 }
