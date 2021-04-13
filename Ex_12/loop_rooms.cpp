@@ -8,8 +8,8 @@ int findrooms(int matrix[1000],int m,int n){
     bool front [1000];
     bool good[1000];
     bool bad[1000];
-    int l;
-    int searched_iterator;
+ //   int l;
+ //   int searched_iterator;
     for (int i = 0; i < E; i++){
         if(matrix[i]==-1){
             good[i] = true;
@@ -43,7 +43,7 @@ int findrooms(int matrix[1000],int m,int n){
 }
 
 void create_matrix(int m, int n, char arr[1000][1000], int matrix[1000]){
-    int E = m*n;//exit node
+ //   int E = m*n;//exit node
 
     // bool matrix [E][E+1];//+1 for exit
 
