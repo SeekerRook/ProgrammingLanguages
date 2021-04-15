@@ -7,7 +7,7 @@ fun checkfrac (sum : real)  (l : real)  (h : real)  = if(~1.0* sum/(h*l)>=1.0) t
                 end
             end
         end 
-   
+
 
 (*fun inner_loop i arr n h sum maxlen =*)
     

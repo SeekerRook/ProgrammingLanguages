@@ -2,46 +2,41 @@
 #include <cstdio>
 using namespace std;
 
-int findrooms(int matrix[1000],int m,int n){
+
+    bool front [1000000];
+
+
+    
+bool findroomsr(int i, int matrix[1000000]){
+    if(matrix[i] == -1){
+        //cout << "room "<< i << " met exit\n";
+        return true;
+    }
+    else if (front[matrix[i]]){
+        //cout << "room "<< i << " met bad node\n";
+        return false;
+    }
+    else {
+        front[i] = true;
+        //cout << "room "<< i << " going to next node\n";
+        bool result = findroomsr(matrix[i],matrix);
+        if(result)front[i] = false;
+        return result;
+    }
+ 
+}
+int findrooms(int matrix[1000000],int m, int n){
     int E = m*n;
     int res = 0;
-    bool front [1000];
-    bool good[1000];
-    bool bad[1000];
- //   int l;
- //   int searched_iterator;
-    for (int i = 0; i < E; i++){
-        if(matrix[i]==-1){
-            good[i] = true;
-            for (int j = 0 ; j < E; j++){
-                if(front[j]) good[j] = true;
-            }  
-        }
-        else {
-            if (good[matrix[i]] == true){
-                good[i] = true;
-                for (int j = 0 ; j < E; j++){
-                    if(front[j]) good[j] = true;
-                }
-            }   
-            else if (bad[matrix[i]] == true || front[matrix[i]] == true){
-                bad[i] = true;
-                res++;
-                for (int j = 0 ; j < E; j++){
-                    if(front[j]) {
-                        bad[j] = true;
-                        res++;
-                    }
-                }
-            }
-            else front[i] = true;          
-        }
+    for (int i = 0 ; i < E; i++){
+        
+        if(!findroomsr(i,matrix)) {
+            //cout << "\n\niterating res for i = "<< i<< "\n\n";
+            res++; 
+        } 
     }
-
     return res;
-
 }
-
 void create_matrix(int m, int n, char arr[1000][1000], int matrix[1000]){
  //   int E = m*n;//exit node
 
@@ -69,7 +64,7 @@ void create_matrix(int m, int n, char arr[1000][1000], int matrix[1000]){
                     }
                     break;
                 case 'U':
-                    if (i-1>= n || i-1<0){
+                    if (i-1>= m || i-1<0){
                         matrix[x]= -1;
                     }
                     else{
@@ -77,7 +72,7 @@ void create_matrix(int m, int n, char arr[1000][1000], int matrix[1000]){
                     }
                     break;
                 case 'D':
-                    if (i+1>= n|| i+1 <0){
+                    if (i+1>= m|| i+1 <0){
                         matrix[x]= -1;
                     }
                     else{
@@ -111,11 +106,13 @@ void read(char* filename,int &m, int &n,char arr[1000][1000]){
         do{
             temp = getc(fd);
 
-            if(temp == '\n'){
+            if(temp == '\n' || temp == EOF ){
                 i++;
                 j= 0;
+                //cout << "\n";
             }
             else{
+                //cout <</*"a["<<i<<"]["<<j<<"] = "<<*/ static_cast<char>(temp) /*<< '\n'*/;
                 arr[i][j] = temp;
                 j++;
             }
@@ -130,9 +127,14 @@ int main(int argc, char **argv){
     int m ;
     int n ;
     char arr [1000][1000];
-    int matrix[1000];
+    int matrix[1000000];
     read(argv[1],m,n,arr);
     create_matrix(m,n,arr, matrix);
+ //   for (int i = 0 ; i< m*n; i++){
+        for (int j = 0; j < m*n; j++){
+            //cout << j <<" : " << matrix[j]<< '\n';
+        }
 
+//    }
     cout <<findrooms(matrix,m,n)<<'\n';
 }
