@@ -17,16 +17,16 @@ fun innerloop i j arr sum h maxLen n =
                         then 
                             if j <> n 
                             then innerloop i (j+1) arr sum1 h maxLen1 n 
-                            else () 
+                            else maxLen1 
                         else 
                             if j <> n 
                             then 
                                 innerloop i (j+1) arr sum1 h maxLen n 
-                            else () ) 
+                            else maxLen ) 
                     else
                         if j <> n 
-                        then innerloop i (j+1) arr sum1 h maxLen1 n 
-                        else ()
+                        then innerloop i (j+1) arr sum1 h maxLen n 
+                        else maxLen
                     
 
                 
@@ -36,10 +36,49 @@ fun innerloop i j arr sum h maxLen n =
                 
         
     )     
-fun outloop
-
+(* fun loop i arr n h =
+    ( 
+    let val sum = List.nth(arr, i)
+        in 
+        if checkfrac sum1 1 h  
+        then 
+            (if l > maxLen 
+            then 
+                if j <> n 
+                then innerloop i (j+1) arr sum1 h maxLen1 n 
+                else maxLen1 
+            else 
+                if j <> n 
+                then 
+                    innerloop i (j+1) arr sum1 h maxLen n 
+                else maxLen ) 
+        else
+            if j <> n 
+            then innerloop i (j+1) arr sum1 h maxLen n 
+            else maxLen
+                    
+    ) *)
 (*fun inner_loop i arr n h sum maxlen =*)
     
+fun parse file =
+    let
+	(* A function to read an integer from specified input. *)
+        fun readInt input = 
+	    Option.valOf (TextIO.scanStream (Int.scan StringCvt.DEC) input)
 
+	(* Open input file. *)
+    	val inStream = TextIO.openIn file
+
+        (* Read an integer (number of countries) and consume newline. *)
+	val n = readInt inStream
+	val h = readInt inStream
+	val _ = TextIO.inputLine inStream
+
+        (* A function to read N integers from the open file. *)
+	fun readInts 0 acc = acc (* Replace with 'rev acc' for proper order. *)
+	  | readInts i acc = readInts (i - 1) (readInt inStream :: acc)
+    in
+   	(n, h, readInts n [])
+    end
 
 (*fun longest filename*)
