@@ -4,77 +4,86 @@ using namespace std;
 
 int Num = 1000000000;
 
-bool compare(const pair<int,int>& a, const pair<int, int>& b){
-    if(a.first==b.first)
-        return a.second<b.second;
-    return a.first<b.first;
+bool compare(const pair<int, int>& a, const pair<int, int>& b)
+{
+    if (a.first == b.first)
+        return a.second < b.second;
+  
+    return a.first < b.first;
 }
+  
 
-int findInd(vector<pair<int,int>>& preSum,int k, int val){
+int findInd(vector<pair<int, int> >& preSum, int n, int val)
+{
 
-    int l=0;
-    int h=k-1;
+    int l = 0;
+    int h = n - 1;
     int mid;
 
-    //store the requires index value
-    int ans=-1;
-    
-    while(l<=h){
-        mid=(l+h)/2;
-        if(preSum[mid].first<=val){
-            ans=mid;
-            l=mid+1;
+    int ans = -1;
+  
 
+    while (l <= h) {
+        mid = (l + h) / 2;
+        if (preSum[mid].first <= val) {
+            ans = mid;
+            l = mid + 1;
         }
         else
-            h=mid-1;
+            h = mid - 1;
     }
+  
     return ans;
 }
-//N-->hospitals,k-->days
-int LongestSub(int arr[],int k,int N){
+
+int LongestSub(int arr[], int n, int x)
+{
     int i;
-    
-    for(i=0;i<k; i++)
-        arr[i]-=N;
-        
-    
-    int maxLen=0;
 
-    vector <pair<int,int>> preSum;
+    for (i = 0; i < n; i++)
+        arr[i] -= x;
 
-    int sum=0;//to store the current value of the sum
+    int maxlen = 0;
+  
 
-    int midInd[k];
+    vector<pair<int, int> > preSum;
+  
 
-    //insert values in preSum vector
-    for(i=0;i<k;i++){
-        sum=sum+arr[i];
-        preSum.push_back({sum,i});
+    int sum = 0;
+  
+    int minInd[n];
+  
+   
+    for (i = 0; i < n; i++) {
+        sum = sum + arr[i];
+        preSum.push_back({ sum, i });
     }
-    sort(preSum.begin(),preSum.end(),compare);
-
-    //update mindInd array
-    midInd[0]=preSum[0].second;
-
-    for(i=1;i<k;i++){
-        midInd[i]=min(midInd[i-1],preSum[i].second);
+  
+    sort(preSum.begin(), preSum.end(), compare);
+ 
+    minInd[0] = preSum[0].second;
+  
+    for (i = 1; i < n; i++) {
+        minInd[i] = min(minInd[i - 1], preSum[i].second);
     }
-    sum=0;
-    for(i=0;i<k;i++){
-        sum=sum + arr[i];
-        
-        if (sum>=0)
-            maxLen=i+1;
-        else{
-            int ind = findInd(preSum,k,sum);
-            if(ind!=-1 && midInd[ind]<1)
-                maxLen=max(maxLen,i-midInd[ind]);
+  
+    sum = 0;
+    for (i = 0; i < n; i++) {
+        sum = sum + arr[i];
+  
+
+        if (sum >= 0)
+            maxlen = i + 1;
+  
+
+        else {
+            int ind = findInd(preSum, n, sum);
+            if (ind != -1 && minInd[ind] < i)
+                maxlen = max(maxlen, i - minInd[ind]);
         }
-
     }
-
-    return maxLen;
+  
+    return maxlen;
 }
 
 void read(char* filename,int &Days, int &Hospitals,int *days){
@@ -88,7 +97,7 @@ void read(char* filename,int &Days, int &Hospitals,int *days){
         int temp;
         int i = 0;
         while(file >> temp){
-            days[i] = temp;
+            days[i] = -1*temp;
             i++;
         }
     }

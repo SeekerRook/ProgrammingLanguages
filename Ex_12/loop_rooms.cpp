@@ -8,19 +8,27 @@ using namespace std;
 
     
 bool findroomsr(int i, int matrix[1000000]){
+    if (matrix[i]== -2){
+        return false;
+    }
     if(matrix[i] == -1){
         //cout << "room "<< i << " met exit\n";
         return true;
     }
     else if (front[matrix[i]]){
         //cout << "room "<< i << " met bad node\n";
+        matrix[i] = -2;
         return false;
     }
     else {
         front[i] = true;
         //cout << "room "<< i << " going to next node\n";
         bool result = findroomsr(matrix[i],matrix);
-        if(result)front[i] = false;
+        if(result){
+            front[i] = false;
+            matrix[i] = -1;
+        }
+        else{ matrix[i] = -2;}
         return result;
     }
  

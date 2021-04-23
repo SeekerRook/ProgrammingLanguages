@@ -1,46 +1,64 @@
 
 fun findroomsr i matr front = 
-	let val A = List.nth (matr,i)
+	let val A = Array.sub (matr,i)
 	in
+	(* print (Int.toString i ^ "\n"); *)
+	if A = ~2
+	then (front,false)
+	else
 		if A = ~1
 		then (front,true)
 		else 
-			if List.exists (fn x => x = A) front
-			then (front,false)
+			if Array.sub(front,i) = true
+			then (
+				Array.update(matr,i,~2);(**)
+				(front,false)
+			)
+			
 			else 
 				(
 				
-					let val (f,result) = findroomsr A matr (i::front) 
+					let 
+						val g = Array.update(front,i,true)
+						val (f,result) = findroomsr A matr front 
 					in
 						if result = true
 						then(
-							([], result)
+							Array.update(front,i,false);
+							Array.update(matr,i,~1);(**)
+							(f, result)
 						)
-						else (f,result)
+						else(
+							Array.update(matr,i,~2);(**)
+							(f,result)
+						) 
 					end
 				)
 	end
 
 fun findrooms matr m n = 
+let val matrix = Array.fromList(matr)
+in
 	let 
-		fun forloop 0 matr m n = 0
-		| forloop i matr m n = 
-			let val (f , r) = findroomsr (i) matr []
+		fun forloop ~1 matrix m n = 0
+		| forloop i matrix m n = 
+			let val (f , r) = findroomsr (i) matrix (Array.array(1000000,false))
 			in
 			if r = false
-			then (forloop (i-1) matr m n)+1
-			else (forloop (i-1) matr m n)
+			then (forloop (i-1) matrix m n)+1
+			else (forloop (i-1) matrix m n)
 			end
 		
 	in
-		forloop (m*n-1) matr m n 
+		forloop (m*n-1) matrix m n 
 	end
+end
 
 fun creatematrix 0 m n arr matrix = matrix
 	| creatematrix x m n arr matrix = 
 		let 
 
-			val check = List.nth(arr, x-1) 
+			val check = Array.sub(arr, x-1) 
 		in
  
 			 case check of
@@ -71,7 +89,8 @@ fun creatematrix 0 m n arr matrix = matrix
 					creatematrix (x-1) m n arr (~1::matrix)
 					else
 					creatematrix (x-1) m n arr (x+n-1::matrix)
-				) 
+				)
+				| _ =>  matrix
 				
 			
 		end
@@ -101,7 +120,7 @@ fun parse file =
     val inputList = readLines []:char list 
 	val _ =TextIO.closeIn inStream
 	in
-   	(m, n, inputList)
+   	(m, n, Array.fromList (inputList))
     end
 
 
@@ -112,6 +131,6 @@ fun loop_rooms filename =
 		val matrix = creatematrix (m*n) m n arr []
 		val res = findrooms matrix m n 
 	in
-		creatematrix (m*n) m n arr []
-		(* print (Int.toString res ^ "\n") *)
+		(* creatematrix (m*n) m n arr [] *)
+		print (Int.toString res ^ "\n")
 	end

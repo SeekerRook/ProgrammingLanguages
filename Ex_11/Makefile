@@ -1,9 +1,8 @@
 all: longest clear
-longest: longest.o
-	g++ longest.o -o longest
-
-longest.o: longest.cpp
-	g++ longest.cpp -c
+longest: exer.o
+	g++ exer.o -o longest
+exer.o: exer.cpp
+	g++ exer.cpp -c
 
 clear :
-	rm longest.o 
+	rm exer.o 
