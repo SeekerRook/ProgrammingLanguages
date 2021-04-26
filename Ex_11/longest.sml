@@ -54,44 +54,48 @@ fun for1 x arr 0 = arr
         
         end
 
-fun for2 sum arr preSum 0 = preSum 
-    | for2 sum arr preSum i =
-        let val s = sum + Array.sub(arr,i-1)
+fun for2 sum arr preSum ~1 n = preSum 
+    | for2 sum arr preSum i n =
+    if (i = n )then for2 sum arr preSum ~1 n else(
+        let val s = sum + Array.sub(arr,i)
         in 
 
-            let val a = (s,i-1)
+            let val a = (s,i)
            in
            
             
-            for2 s arr (a::preSum) (i-1)
+            for2 s arr (a::preSum) (i+1) n
             end
         end
-
-fun for3 minInd preSum 1 = minInd 
-    | for3 minInd preSum i = 
-        let val x = Array.update (minInd , (i-1), (min2 (Array.sub(minInd, (i-2)), second(Array.sub(preSum,(i-1))))));
+    )
+fun for3 minInd preSum ~1 n= minInd 
+    | for3 minInd preSum i n = 
+        if (i = n)then for3 minInd preSum ~1 n else(
+        let val x = Array.update (minInd , i, (min2 (Array.sub(minInd, (i-1)), second(Array.sub(preSum,(i))))))
         in
         
-        for3 minInd preSum (i-1)
-        end;
+        for3 minInd preSum (i+1) n
+        end
+        )
 
-fun for4 sum arr n preSum minInd maxlen 0 = maxlen
-    |  for4 sum arr n preSum minInd maxlen i =
+fun for4 sum arr n preSum minInd maxlen ~1 = maxlen
+    |  for4 sum arr n preSum minInd maxlen i  =
+        if i = n then for4 sum arr n preSum minInd maxlen ~1  else
         let 
-            val s = sum + Array.sub(arr, i-1)
+            val s = sum + Array.sub(arr, i)
         in
             let val ind = findInd preSum n s
             in let
             val mi = Array.sub(minInd , ind)
             in 
                 if s >= 0
-                then for4 s arr n preSum minInd (i-1) (i-1) 
+                then for4 s arr n preSum minInd (i+1) (i+1) 
                 else 
-                    if ((ind <> ~1) andalso (mi < i-1))
+                    if ((ind <> ~1) andalso (mi < i))
                     then
-                    for4 s arr n preSum minInd (max (maxlen, mi)) (i-1)
+                    for4 s arr n preSum minInd (max (maxlen,(i - mi))) (i+1)
                     else
-                    for4 s arr n preSum  minInd maxlen (i-1)
+                    for4 s arr n preSum  minInd maxlen (i+1)
             end
             end
         end
@@ -106,14 +110,14 @@ fun insertionsort [] = []
 
 fun LongestSub arr n x = 
 let val a = for1 x arr n
-in let val preSum = rev(for2 0 a [] n)
+in let val preSum = rev(for2 0 a [] 0 n)
     in 
-        let val preSumsorted = Array.fromList (insertionsort preSum)
+        let val preSumsorted = Array.fromList ((insertionsort preSum))
         in  let val minInd = Array.array(n,0)
             in
                 let val w = Array.update(minInd, 0,second(Array.sub(preSumsorted,0)))
                 in
-                    let val minInd2 = for3 minInd preSumsorted n
+                    let val minInd2 = for3 minInd preSumsorted 1 n
                     in for4 0 a n preSumsorted minInd2 0 n 
                     end
                 end
@@ -139,7 +143,7 @@ fun parse file =
 	val _ = TextIO.inputLine inStream
 
         (* A function to read N integers from the open file. *)
-	fun readInts 0 acc = acc (* Replace with 'rev acc' for proper order. *)
+	fun readInts 0 acc = rev acc (* Replace with 'rev acc' for proper order. *)
 	  | readInts i acc = readInts (i - 1) (readInt inStream :: acc)
     in
    	(n, h, readInts n [])
