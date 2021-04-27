@@ -46,7 +46,7 @@ fun for1 x arr 0 = arr
     | for1 x arr i =
         let val old = Array.sub (arr , (i-1))
         in 
-            let val a = Array.update (arr , (i-1), old-x)
+            let val a = Array.update (arr , (i-1), ~1*(old)-x)
             in
                 for1 x arr (i-1)
             end
@@ -100,6 +100,7 @@ fun for4 sum arr n preSum minInd maxlen ~1 = maxlen
             end
         end
 
+
 fun insert x [] = [x]
     | insert x (y::ys) =
         if tupleCompare (x,y) = LESS
@@ -119,12 +120,14 @@ in let val preSum = rev(for2 0 a [] 0 n)
                 in
                     let val minInd2 = for3 minInd preSumsorted 1 n
                     in for4 0 a n preSumsorted minInd2 0 0 
+                    
                     end
                 end
             end
         end
     end
 end
+
 
 
 
@@ -149,7 +152,7 @@ fun parse file =
    	(n, h, readInts n [])
     end
 
-(*fun longest filename*)
+
 fun longest filename = 
     let val (n,h,ptr )= parse filename
     in 
@@ -157,6 +160,7 @@ fun longest filename =
         in
             let val result = LongestSub arr n h
             in print (Int.toString result ^ "\n")
+            
             end
         end
     end

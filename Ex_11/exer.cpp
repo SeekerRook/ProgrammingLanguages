@@ -15,7 +15,6 @@ bool compare(const pair<int, int>& a, const pair<int, int>& b)
 
 int findInd(vector<pair<int, int> >& preSum, int n, int val)
 {
-
     int l = 0;
     int h = n - 1;
     int mid;

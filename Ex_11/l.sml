@@ -41,12 +41,38 @@ fun findInd preSum n v =
     in 
         fIwhile (l<=h) h l preSum ans v 
     end
-
+(*  *)
+(* fun findInd_cheat presum v n = 
+let
+  val l = ref 0
+  val h = ref (n-1)
+  val mid = ref 0
+  val ans = ref ~1
+in
+  (
+      while !l <= !h do
+      (
+          mid := (!l + !h)div 2;
+        (* if presum[!mid].first <= val then *)
+          if first (Array.sub(presum, !mid )) <= v then
+          (
+              ans := !mid;
+              l := !mid +1 
+          )
+          else
+          (
+              h := !mid -1
+          )
+      );
+      !ans
+  )
+end *)
+(*  *)
 fun for1 x arr 0 = arr 
     | for1 x arr i =
         let val old = Array.sub (arr , (i-1))
         in 
-            let val a = Array.update (arr , (i-1), old-x)
+            let val a = Array.update (arr , (i-1), ~1*(old)-x)
             in
                 for1 x arr (i-1)
             end
@@ -100,6 +126,36 @@ fun for4 sum arr n preSum minInd maxlen ~1 = maxlen
             end
         end
 
+(* START  *)
+(* fun stelios_loop arr minInd preSum n= 
+let 
+val cur_sum = ref 0
+val I_IDX = ref 0
+val max_len = ref 0
+val ind = ref 0 
+in 
+(while !I_IDX < n do(
+    cur_sum := !cur_sum + Array.sub(arr, !I_IDX);
+
+    (if (!cur_sum >= 0) 
+    then (
+        max_len := (!I_IDX + 1 )
+    )
+    else(
+        ind := findInd_cheat preSum (!cur_sum) n;
+        (if !ind <> ~1 andalso Array.sub(minInd, !ind)< !I_IDX then(
+            max_len := max (!max_len, (!I_IDX - Array.sub(minInd, !ind)))
+        )else())
+    );
+    I_IDX := !I_IDX + 1
+));
+
+ print(Int.toString (!max_len))
+ 
+)
+end *)
+(* END  *)
+
 fun insert x [] = [x]
     | insert x (y::ys) =
         if tupleCompare (x,y) = LESS
@@ -119,12 +175,14 @@ in let val preSum = rev(for2 0 a [] 0 n)
                 in
                     let val minInd2 = for3 minInd preSumsorted 1 n
                     in for4 0 a n preSumsorted minInd2 0 0 
+                    (* in stelios_loop a minInd2 preSumsorted n *)
                     end
                 end
             end
         end
     end
 end
+
 
 
 
@@ -157,6 +215,7 @@ fun longest filename =
         in
             let val result = LongestSub arr n h
             in print (Int.toString result ^ "\n")
+            (* in() *)
             end
         end
     end
