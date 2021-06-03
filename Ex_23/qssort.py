@@ -80,46 +80,49 @@ def BFS(t):
     visited = []
     if t:
         visited.append(t)
-
+    Searched = set()
     current = t
     res = ""
     while current :
         if (issorted(current.queue) and len(current.stack) == 0):
             
-            print(current.path)
+            if(len(current.path) == 0):
+                print("empty")
+            else: print(current.path)
             
             break
         ql = current.queue[:]
         sl = current.stack[:] 
         qr = current.queue[:]
         sr = current.stack[:]
-        # print("########")
-        # print("before")
-        # print(ql)
-        # print(sl)
+
         Q(ql,sl)
-        # print("after q")
-        # print(ql)
-        # print(sl)                 
+              
         S(qr,sr)
-        # print("after s")
-        # print(qr)
-        # print(sr)
+
         current.left = Node(ql,sl,current.path + "Q")  
         current.right = Node(qr,sr,current.path+"S")
         if current.left:
             #current.left.prt()
             res += "Q"
-            visited.append(current.left)
+            if (not str(current.left.queue) + '-' + str(current.left.stack) in Searched):
+                visited.append(current.left)
+                Searched.add(str(current.left.queue) + '-' + str(current.left.stack))
         if current.right:
-            res += "R"
+            res += "S"
             #current.right.prt()
-            visited.append(current.right)
+            if (not str(current.right.queue) + str(current.right.stack) in Searched):
+                visited.append(current.right)
+                Searched.add(str(current.right.queue) + str(current.right.stack))
+
         visited.pop(0)
         #if not visited:
         #    break
         res = res[:len(res)-2]
         current = visited[0]
+
+
+
 def split(word):
     res = [char for char in word]
     if res[len(res)-1] == '\n':
@@ -132,13 +135,17 @@ def read(filename):
     # Extract dimensions from first line. Cast values to integers from strings.
     l = lines_list[0]
     data = []
+    temp = 0
     for i in lines_list[1]:
-        if i.isdigit() == True:
-            data.append(int(i))
+        if i.isdigit() == False:
+            data.append(temp)
+            temp = 0
+        else: temp = 10*temp + int(i)
+    if (temp != 0):
+        data.append(temp)
     return [l,data]
 
 [l,data] = read(sys.argv[1])
-
 q = data
 s = []
 root = Node(q,s,"")

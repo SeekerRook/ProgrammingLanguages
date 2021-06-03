@@ -45,11 +45,11 @@ def creatematrix(m,n,arr,matrix):
                     matrix[x]=-1
                 else:matrix[x]=j-1+n*i
             elif  arr[i][j] == 'U':
-                if i-1>=n or i-1<0:
+                if i-1>=m or i-1<0:
                     matrix[x]=-1
                 else:matrix[x]=j+n*i-n
             elif  arr[i][j] == 'D':
-                if i+1>=n or i+1<0:
+                if i+1>=m or i+1<0:
                     matrix[x]=-1
                 else:matrix[x]=j+n*i+n
 
@@ -68,8 +68,8 @@ def read(filename):
     my_data = [split(line) for line in lines_list[1:]]
     return [cols,rows,my_data]
 [m,n,arr]= read(sys.argv[1])
-print(m)
-print(n)
+# print(m)
+# print(n)
 #print(arr)
 matrix = [0]*(m*n)
 front = [False]*(m*n)
