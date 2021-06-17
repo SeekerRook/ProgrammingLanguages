@@ -1,7 +1,0 @@
-4
-1 2 3 4
-
-
-        if i.isdigit() == False:
-            data.append(temp)
-        else: temp = 10*temp + int(i)

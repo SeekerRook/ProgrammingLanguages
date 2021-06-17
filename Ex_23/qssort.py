@@ -3,16 +3,13 @@
 ###                    https://codereview.stackexchange.com/questions/191984/perform-bfs-on-a-binary-tree
 ## Queue & Stack functions
 import sys
+from collections import deque
 def pop(l):
-    l.reverse()
-    r =  l.pop()
-    l.reverse()
+    r =  l.pop(0)
     return r
 
 def push (s,n):
-    s.reverse()
-    s.append(n)
-    s.reverse()
+    s.insert(0,n)
 
 def append(q,n):
     q.append(n)
@@ -77,7 +74,7 @@ class Node:
 
 def BFS(t):
     """In BFS the Node Values at each level of the Tree are traversed before going to next level"""
-    visited = []
+    visited = deque()
     if t:
         visited.append(t)
     Searched = set()
@@ -88,8 +85,9 @@ def BFS(t):
             
             if(len(current.path) == 0):
                 print("empty")
-            else: print(current.path)
-            
+            else: 
+                print(current.path)
+         
             break
         ql = current.queue[:]
         sl = current.stack[:] 
@@ -115,9 +113,7 @@ def BFS(t):
                 visited.append(current.right)
                 Searched.add(str(current.right.queue) + str(current.right.stack))
 
-        visited.pop(0)
-        #if not visited:
-        #    break
+        visited.popleft()
         res = res[:len(res)-2]
         current = visited[0]
 

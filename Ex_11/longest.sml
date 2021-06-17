@@ -117,6 +117,7 @@ in
     )
     else(
         ind := findInd preSum (!cur_sum) n;
+        print("FI("^Int.toString(!cur_sum)^","^Int.toString(n)^")"^Int.toString (!ind) ^ "\n");
         (if !ind <> ~1 andalso Array.sub(minInd, !ind)< !I_IDX then(
             max_len := max (!max_len, (!I_IDX - Array.sub(minInd, !ind)))
         )else())
