@@ -1,0 +1,75 @@
+23/6/2021 Vardakis Christoforos  el18883
+
+Excercise 1
+
+β) Δεν είναι διφορούμενη, διότι ένα <S> δίνει είτε τερματικό χαρακτήρα a  είτε <L>, το οποίο είναι μέσα σε παρενθέσεις.
+αντίστοιχα το <L> παράγει είτε <S> είτε <L> ακολουθούμενο από , και <S>. Έτσι δεν μπορεί να παραχθεί η ίδια συμβολοσειρά από διαφορετικά συντακτικά δέντρα.
+
+γ) Η γλώσσα αυτή παράγει όλους τους πιθανούς συνδιασμούς από χαρακτήρες a που βρίσκονται μέσα σε παρενθέσεις και χωρίζζονται με κόμμα, με τον αναμενόμενο ορθό τρόπο (όχι unmatched παρενθέσεις, όχι κόμμα πρίν ή μετα από παρένθεση, όχι σειρά από a που δεν περικλείετε από παρενθέσεις (πχ a,a,a,a ) ).  
+Excercise 2
+
+α)
+
+fun common_prefix x y =
+    let fun aux (h1 :: t1) (h2 :: t2) prefix =
+        if h1 = h2 then aux t1 t2 (prefix @ [h1]) else (prefix, (h1::t1), (h2::t2))
+    | aux s1 s2 prefix = (prefix, s1, s2)
+in  aux x y []
+end
+β)
+
+Το πρόγραμμα επιτυγχάνει για οποιαδήποτε λίστα. Το πρόβλημα είναι στον
+τρίτο κανόνα που περνάει στο επόμενο βήμα ανεξαρτήτως του αν το head υπαρχει στη λίστα η όχι. 
+ο κώδικας που λειτουργεί είναι:
+
+unique([]).
+unique([Item | Rest]) :-
+    member(Item, Rest) -> fail ; unique(Rest).
+
+γ) static -> 817342817
+    dynamic -> 81734242
+
+δ)  static -> 838
+    dynamic -> 888
+
+
+Excercise 3
+
+
+Excercise 4
+
+datatype 'a tree = empty | node of 'a * 'a tree * 'a tree;
+
+Excercise 5
+
+
+
+Excercise 6
+
+def most_frequent(List):
+    max = 0
+    mc = 0
+    for i in List:
+        lc = List.count(i)
+        if  lc > max:
+            max = i
+            mc = lc
+  
+    return (max, mc)
+
+def sliding_helper(lis,k,res):
+    if lis == [] : 
+        print(most_frequent(res))
+        return 1
+
+    res.append(sum(lis[:4]))
+
+    sliding_helper(lis[1:],k,res)
+
+def sliding(lis,k):
+   sliding_helper(lis,k,[])
+
+
+Πολυπλοκητα Ο(len(list)*k)
+
+
