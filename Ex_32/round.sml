@@ -44,7 +44,7 @@ fun maxes_n_sums [] is t min  = min
 
         in
             (*check move validity for this fs (this doesn't allow consequent moves of the same car) *)
-            if (2 * first res) <= (1+(second res) ) 
+            if (2 * first res) <= (1+(second res) ) (*sum - max + 1 <= max*)
             
             then                
             maxes_n_sums fslt is t (min_tuple min  res)
