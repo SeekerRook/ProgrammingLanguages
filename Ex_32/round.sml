@@ -29,7 +29,8 @@ fun maxes_n_sums [] is t min  = min
 |   maxes_n_sums (fslh::fslt) is t min  = 
         let 
             val town = first_of_l fslh
-            (*find max and sum for every fs*)
+
+            (*find max and sum for this fs*)
             fun find_max_n_sum [] [] tmax tsum = (tmax,tsum,town)
             | find_max_n_sum (fsh::fst) (ish::ist) tmax tsum =
                 let 
@@ -42,6 +43,7 @@ fun maxes_n_sums [] is t min  = min
             val res = find_max_n_sum fslh is 0 0
 
         in
+            (*check move validity for this fs (this doesn't allow consequent moves of the same car) *)
             if (2 * first res) <= (1+(second res) ) 
             
             then                
