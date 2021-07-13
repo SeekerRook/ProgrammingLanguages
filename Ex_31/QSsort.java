@@ -6,8 +6,8 @@ class Node{
         System.out.println("S : " + this.S);
         System.out.println("Path : " + this.path);
     }
-    private List<Integer> Q;
-    private List<Integer> S;
+    private int[] Q;
+    private int[] S;
     private String path;
     private Node left;
     private Node right;
@@ -15,10 +15,13 @@ class Node{
 }
 
 public class QSsort{
+    public static void BFS(Node t){
 
+    }
     public static void main(String [] args){
         String Input = args[0];
         System.out.println("Still not ready");
         System.out.println("Input : "+ Input);
     }
+    
 }
