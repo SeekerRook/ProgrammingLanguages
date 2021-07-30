@@ -2,18 +2,33 @@ import java.util.*;
 class Node{
 
 
-     int[] Q;
-     int[] S;
+     Queue<Integer> Q;
+     Stack<Integer> S;
+     String getQS(){
+         return(Q.toString() + S.toString());
+     }
      String path;
      Node left;
      Node right;
-     public Node(int Qin [],int Sin[],String pathin)
+     public Node(Queue<Integer> Qin ,Stack<Integer> Sin,String pathin)
      {
          Q = Qin;
          S = Sin;
          path = pathin;
          left = right = null;
      }
+     public Node(Node node)
+     {
+         Q = new LinkedList<Integer>(node.Q);
+         S = new  Stack<Integer>();
+         S.addAll(node.S);
+         path = node.path;
+         if (node.left == null) left = null;
+         else left = new Node (node.left);
+         if (node.right == null) right = null;
+         else right = new Node (node.right);
+     }
+
      public void print(){
         System.out.println("######NODE#####");
         System.out.println("Q : " + this.Q);
@@ -25,48 +40,96 @@ class Node{
 
 public class QSsort{
     //Root of the Binary Tree
-    Node root;
- 
-    int minimumDepth()
-    {
-        return minimumDepth(root);
+   static Set<String> Searched = new HashSet<String>();
+   static Queue<Node> visited = new LinkedList<Node>();
+
+    static void Q (Queue<Integer>Qin, Stack<Integer> Sin){
+        if (Qin.size()!=0){
+        int Ele = Qin.poll();
+        Sin.push(Ele);
+        }
     }
- 
-    /* Function to calculate the minimum depth of the tree */
-    int minimumDepth(Node root){
-        // Corner case. Should never be hit unless the code is
-        // called on root = NULL
-        if (root == null)
-            return 0;
- 
-        // Base case : Leaf Node. This accounts for height = 1.
-        if (root.left == null && root.right == null)
-            return 1;
- 
-        // If left subtree is NULL, recur for right subtree
-        if (root.left == null)
-            return minimumDepth(root.right) + 1;
- 
-        // If right subtree is NULL, recur for left subtree
-        if (root.right == null)
-            return minimumDepth(root.left) + 1;
- 
-        return Math.min(minimumDepth(root.left),
-                        minimumDepth(root.right)) + 1;
+        
+    static void S (Queue<Integer>Qin, Stack<Integer> Sin){
+        if (Sin.size()!=0){
+        int Ele = Sin.pop();
+        Qin.add(Ele);
+        }
     }
- 
-    /* Driver program to test above functions */
+    
+    static boolean issorted_h (Queue<Integer> Q){
+        if (Q.isEmpty() || Q.size() == 1) return true;
+        int First = Q.poll();
+        int Second = Q.peek();
+        if (First > Second) {
+            return false;
+        }
+        else {
+           return issorted(Q);
+        }
+
+
+    }
+
+    static boolean issorted(Queue<Integer> Q){
+        Queue<Integer> Copy = new LinkedList<Integer> (Q);
+        return issorted_h(Copy);
+    }
+    
+    static void BFS(Node current){
+        
+        if (current == null){System.out.println("ERROR Null Node");
+        
+        }
+        else{
+        if (issorted(current.Q) && current.S.empty()){
+            if (current.path == "" ) System.out.println("empty");
+            else  System.out.println(current.path);
+        }
+        else{
+        current.left = new Node(current);
+        Q(current.left.Q,current.left.S);
+        current.left.path = current.path + "Q";
+        current.right = new Node(current);
+        S(current.right.Q,current.right.S);
+        current.right.path = current.path + "S";
+        if (!Searched.contains(current.left.getQS())){
+            visited.add(current.left);
+            Searched.add(current.left.getQS());
+            // System.out.println(Searched);
+        }
+        if (!Searched.contains(current.right.getQS())){
+            visited.add(current.right);
+            Searched.add(current.right.getQS());
+            // System.out.println(Searched);
+        }
+        visited.poll();
+        BFS (visited.peek());
+    }
+
+    }
+    }
+
     public static void main(String args[])
     {
-        QSsort tree = new QSsort();
-        int[]Q = {1,2,3,4};
-        int[]S = new int[10];
+       
+        Queue<Integer> Q = new LinkedList<Integer>();
 
-        tree.root = new Node(Q,S,"");
+        Q.add(1);
+        Q.add(3);
+        Q.add(4);
+        Q.add(2);
+        
+        Stack<Integer> S = new Stack<Integer>();
+        // S.push(3);
+        Node root = new Node(Q,S,"");
 
 
- 
-        System.out.println("The minimum depth of "+
-          "binary tree is : " + tree.minimumDepth());
+        visited.add(root);
+        Searched.add(root.getQS());
+        BFS(root);
+        // System.out.println(root.getQS());    
+        
+
     }
 }
