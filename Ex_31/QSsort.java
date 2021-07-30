@@ -78,14 +78,13 @@ public class QSsort{
     }
     
     static void BFS(Node current){
-        
-        if (current == null){System.out.println("ERROR Null Node");
-        
-        }
-        else{
+        while (current != null){
+
+
         if (issorted(current.Q) && current.S.empty()){
             if (current.path == "" ) System.out.println("empty");
             else  System.out.println(current.path);
+            break;
         }
         else{
         current.left = new Node(current);
@@ -105,15 +104,17 @@ public class QSsort{
             // System.out.println(Searched);
         }
         visited.poll();
-        BFS (visited.peek());
+        // BFS (visited.peek());
+        current = visited.peek();
+        }
     }
 
-    }
+    
     }
 
     public static void main(String args[])
     {
-       
+       try{
         Queue<Integer> Q = new LinkedList<Integer>();
  
         Stack<Integer> S = new Stack<Integer>();
@@ -143,6 +144,9 @@ public class QSsort{
         catch (IOException e){
             e.printStackTrace();
         }
+    }catch(StackOverflowError e){
+        System.out.println(visited.peek().S.size());
+    }
 
     }
 }
