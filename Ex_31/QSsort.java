@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 class Node{
 
 
@@ -114,14 +115,22 @@ public class QSsort{
     {
        
         Queue<Integer> Q = new LinkedList<Integer>();
-
-        Q.add(1);
-        Q.add(3);
-        Q.add(4);
-        Q.add(2);
-        
+ 
         Stack<Integer> S = new Stack<Integer>();
-        // S.push(3);
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(args[0]));
+            String line1 = reader.readLine();
+            String line2 = reader.readLine();
+            reader.close();
+            // String[] countstr = line1.split (" ");
+            int count = Integer.parseInt(line1);
+            // int c = Integer.parseInt(ct[1]);
+            String[] Questr = line2.split(" ");
+            for(int i = 0; i < count; i++){
+                Q.add(Integer.parseInt(Questr[i]));        
+            }
+        
+
         Node root = new Node(Q,S,"");
 
 
@@ -129,7 +138,11 @@ public class QSsort{
         Searched.add(root.getQS());
         BFS(root);
         // System.out.println(root.getQS());    
-        
+        }
+
+        catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 }
