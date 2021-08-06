@@ -1,17 +1,19 @@
 import java.util.*;
+
+
 import java.io.*;
 class Node{
 
 
-     Queue<Integer> Q;
+     Deque<Integer> Q;
      Stack<Integer> S;
      String getQS(){
-         return(Q.toString() + S.toString());
+        return(Q.toString() + S.toString());
      }
      String path;
      Node left;
      Node right;
-     public Node(Queue<Integer> Qin ,Stack<Integer> Sin,String pathin)
+     public Node(Deque<Integer> Qin ,Stack<Integer> Sin,String pathin)
      {
          Q = Qin;
          S = Sin;
@@ -40,6 +42,8 @@ class Node{
 }
 
 public class QSsort{
+    static int min;
+    static int max;
     //Root of the Binary Tree
    static Set<String> Searched = new HashSet<String>();
    static Queue<Node> visited = new LinkedList<Node>();
@@ -76,7 +80,28 @@ public class QSsort{
         Queue<Integer> Copy = new LinkedList<Integer> (Q);
         return issorted_h(Copy);
     }
-    
+
+
+    static void addnew (Node N){
+
+        if ((!Searched.contains(N.getQS())) && N!= null){
+            visited.add(N);
+            Searched.add(N.getQS());
+            // System.out.println(Searched);
+        }
+    }
+    static void Qmove(Node N){
+        Node Next = new Node(N);
+        Q(Next.Q,Next.S);
+        Next.path = N.path + "Q";
+        addnew(Next);
+    }
+    static void Smove(Node N){
+        Node Next = new Node(N);
+        S(Next.Q,Next.S);
+        Next.path = N.path + "S";
+        addnew(Next);
+    }
     static void BFS(Node current){
         while (current != null){
 
@@ -87,35 +112,45 @@ public class QSsort{
             break;
         }
         else{
-        current.left = new Node(current);
-        Q(current.left.Q,current.left.S);
-        current.left.path = current.path + "Q";
-        current.right = new Node(current);
-        S(current.right.Q,current.right.S);
-        current.right.path = current.path + "S";
-        if (!Searched.contains(current.left.getQS())){
-            visited.add(current.left);
-            Searched.add(current.left.getQS());
-            // System.out.println(Searched);
+
+        if (current.S.empty() ){
+            Qmove(current);
         }
-        if (!Searched.contains(current.right.getQS())){
-            visited.add(current.right);
-            Searched.add(current.right.getQS());
-            // System.out.println(Searched);
+        else if (current.Q.peek() == null){
+            Smove(current);
         }
+        else {
+            int Qft = current.Q.peekLast();
+            int Qhd = current.Q.peek();
+            int Shd = current.S.peek();
+            String last = current.path.substring(current.path.length() - 1);
+    
+   
+         if (Shd == Qhd){//join equals
+            Qmove(current);
+        }
+        else if ((Shd == Qft )&& ( last == "S")){
+            Smove(current);
+        }
+        else {//normal
+        Qmove(current);
+        Smove(current);
+        }
+    }
         visited.poll();
+
         // BFS (visited.peek());
         current = visited.peek();
+        
         }
-    }
-
     
     }
+}
 
     public static void main(String args[])
     {
        try{
-        Queue<Integer> Q = new LinkedList<Integer>();
+        Deque<Integer> Q = new LinkedList<Integer>();
  
         Stack<Integer> S = new Stack<Integer>();
         try{
@@ -133,7 +168,8 @@ public class QSsort{
         
 
         Node root = new Node(Q,S,"");
-
+        min = Collections.min(Q);
+        max = Collections.max(Q);
 
         visited.add(root);
         Searched.add(root.getQS());
